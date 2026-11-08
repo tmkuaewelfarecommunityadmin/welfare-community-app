@@ -4,21 +4,21 @@ import { getTranslation } from '../i18n/translations';
 import { PWAInstallButton } from './PWAInstallButton';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { OrgLogo } from './OrgLogo';
-import { 
-  X, 
-  Globe, 
-  UserCheck, 
-  Sparkles, 
-  LayoutDashboard, 
-  CreditCard, 
-  HeartHandshake, 
-  BookOpen, 
-  Users, 
-  RefreshCw, 
-  ShieldCheck, 
-  Check, 
-  Wifi, 
-  WifiOff, 
+import {
+  X,
+  Globe,
+  UserCheck,
+  Sparkles,
+  LayoutDashboard,
+  CreditCard,
+  HeartHandshake,
+  BookOpen,
+  Users,
+  RefreshCw,
+  ShieldCheck,
+  Check,
+  Wifi,
+  WifiOff,
   ChevronRight,
   Info,
   Building,
@@ -88,51 +88,51 @@ export const HeaderDrawer: React.FC<Props> = ({
   if (!isOpen) return null;
 
   const roles: { role: UserRole; labelEn: string; labelTa: string; descEn: string; descTa: string }[] = [
-    { 
-      role: 'admin', 
-      labelEn: 'Super Admin', 
+    {
+      role: 'admin',
+      labelEn: 'Super Admin',
       labelTa: 'முதன்மை நிர்வாகி',
       descEn: 'Full RBAC authority, user & role mapping, branding, and ledger controls',
       descTa: 'முழு நிர்வாக உரிமை, பொறுப்பு ஒதுக்கீடு மற்றும் அனைத்து நிதி செயல்பாடுகள்'
     },
-    { 
-      role: 'president', 
-      labelEn: 'President', 
+    {
+      role: 'president',
+      labelEn: 'President',
       labelTa: 'தலைவர்',
       descEn: 'Governance oversight, high-value assistance approvals',
       descTa: 'பொது மேற்பார்வை மற்றும் உயர் நிதி ஒப்புதல்'
     },
-    { 
-      role: 'treasurer', 
-      labelEn: 'Treasurer', 
+    {
+      role: 'treasurer',
+      labelEn: 'Treasurer',
       labelTa: 'பொருளாளர்',
       descEn: 'Field collections, cash/UPI receipts, ledger & payouts',
       descTa: 'சந்தா வரவு ரசீதுகள், பேரேடு மற்றும் நிதி வழங்கல்'
     },
-    { 
-      role: 'secretary', 
-      labelEn: 'General Secretary', 
+    {
+      role: 'secretary',
+      labelEn: 'General Secretary',
       labelTa: 'செயலாளர்',
       descEn: 'Member registry, request review coordination',
       descTa: 'உறுப்பினர் சேர்க்கை மற்றும் கோரிக்கை ஒருங்கிணைப்பு'
     },
-    { 
-      role: 'committee', 
-      labelEn: 'Committee Member', 
+    {
+      role: 'committee',
+      labelEn: 'Committee Member',
       labelTa: 'செயற்குழு உறுப்பினர்',
       descEn: 'Review and vote on welfare assistance requests',
       descTa: 'உதவிக் கோரிக்கைகளை பரிசீலித்து வாக்களித்தல்'
     },
-    { 
-      role: 'member', 
-      labelEn: 'Contributing Member', 
+    {
+      role: 'member',
+      labelEn: 'Contributing Member',
       labelTa: 'சந்தாதாரர்',
       descEn: 'View own payment dues and community fund ledger',
       descTa: 'சொந்த சந்தா நிலை மற்றும் பொது நிதி இருப்பு பார்வை'
     },
-    { 
-      role: 'auditor', 
-      labelEn: 'Honorary Auditor', 
+    {
+      role: 'auditor',
+      labelEn: 'Honorary Auditor',
       labelTa: 'தணிக்கையாளர்',
       descEn: 'Read-only financial statements and audit verification',
       descTa: 'தணிக்கை அறிக்கை மற்றும் வரவு-செலவு சரிபார்ப்பு'
@@ -141,12 +141,12 @@ export const HeaderDrawer: React.FC<Props> = ({
 
   const allNavItems = [
     { id: 'dashboard', label: t.dashboard, icon: LayoutDashboard },
-    { 
-      id: 'contributions', 
+    {
+      id: 'contributions',
       label: activeRole === 'member'
         ? (lang === 'ta' ? 'எனது சந்தா & நிலுவைகள்' : 'My Contributions & Dues')
-        : t.contributions, 
-      icon: CreditCard 
+        : t.contributions,
+      icon: CreditCard
     },
     { id: 'assistance', label: t.assistance, icon: HeartHandshake },
     { id: 'ledger', label: t.ledger, icon: BookOpen },
@@ -168,16 +168,16 @@ export const HeaderDrawer: React.FC<Props> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop with blur and fade */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Slide-over Drawer panel */}
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div className="fixed inset-y-0 left-0 max-w-full flex pl-0">
         <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col transform transition ease-in-out duration-300">
-          
+
           {/* Drawer Header */}
           <div className="px-5 py-4 bg-stone-900 text-white flex items-center justify-between border-b border-stone-800">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -187,8 +187,8 @@ export const HeaderDrawer: React.FC<Props> = ({
                   {lang === 'ta' ? (orgInfo.nameTa || orgInfo.name) : (orgInfo.name || orgInfo.nameTa)}
                 </h2>
                 <p className="text-[11px] text-stone-400 truncate">
-                  {lang === 'ta' 
-                    ? `${orgInfo.villageTa || orgInfo.village} • ${orgInfo.districtTa || orgInfo.district}` 
+                  {lang === 'ta'
+                    ? `${orgInfo.villageTa || orgInfo.village} • ${orgInfo.districtTa || orgInfo.district}`
                     : `${orgInfo.village || orgInfo.villageTa} • ${orgInfo.district || orgInfo.districtTa}`}
                 </p>
               </div>
@@ -205,7 +205,7 @@ export const HeaderDrawer: React.FC<Props> = ({
 
           {/* Drawer Body (Scrollable) */}
           <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs text-stone-700">
-            
+
             {/* Authenticated Gmail Member Badge */}
             {authEmail && (
               <div className="p-3.5 rounded-2xl border border-purple-200 bg-purple-50/70 flex items-center justify-between gap-3 shadow-2xs">
@@ -237,9 +237,8 @@ export const HeaderDrawer: React.FC<Props> = ({
             )}
 
             {/* Quick Status / Offline Banner */}
-            <div className={`p-3 rounded-xl border flex items-center justify-between ${
-              isOnline ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'
-            }`}>
+            <div className={`p-3 rounded-xl border flex items-center justify-between ${isOnline ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'
+              }`}>
               <div className="flex items-center gap-2">
                 {isOnline ? (
                   <Wifi className="w-4 h-4 text-emerald-700" />
@@ -319,15 +318,14 @@ export const HeaderDrawer: React.FC<Props> = ({
                 <Globe className="w-3.5 h-3.5 text-stone-400" />
                 <span>{lang === 'ta' ? 'மொழி தேர்வு / Language' : 'Display Language'}</span>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-2 bg-stone-100 p-1 rounded-xl border border-stone-200">
                 <button
                   onClick={() => onLanguageChange('ta')}
-                  className={`py-2 px-3 rounded-lg font-bold flex items-center justify-center gap-1.5 transition ${
-                    lang === 'ta'
+                  className={`py-2 px-3 rounded-lg font-bold flex items-center justify-center gap-1.5 transition ${lang === 'ta'
                       ? 'bg-emerald-700 text-white shadow-2xs'
                       : 'text-stone-700 hover:text-stone-900 hover:bg-stone-200/60'
-                  }`}
+                    }`}
                 >
                   {lang === 'ta' && <Check className="w-3.5 h-3.5" />}
                   <span>தமிழ் (Tamil)</span>
@@ -335,11 +333,10 @@ export const HeaderDrawer: React.FC<Props> = ({
 
                 <button
                   onClick={() => onLanguageChange('en')}
-                  className={`py-2 px-3 rounded-lg font-bold flex items-center justify-center gap-1.5 transition ${
-                    lang === 'en'
+                  className={`py-2 px-3 rounded-lg font-bold flex items-center justify-center gap-1.5 transition ${lang === 'en'
                       ? 'bg-emerald-700 text-white shadow-2xs'
                       : 'text-stone-700 hover:text-stone-900 hover:bg-stone-200/60'
-                  }`}
+                    }`}
                 >
                   {lang === 'en' && <Check className="w-3.5 h-3.5" />}
                   <span>English</span>
@@ -355,7 +352,7 @@ export const HeaderDrawer: React.FC<Props> = ({
                   <span>{lang === 'ta' ? 'கட்டமைப்பு திருத்தங்கள் & பரிந்துரைகள்' : 'Architecture & Optimizations'}</span>
                 </div>
 
-                <div 
+                <div
                   onClick={() => {
                     onClose();
                     onOpenAnalysis();
@@ -370,8 +367,8 @@ export const HeaderDrawer: React.FC<Props> = ({
                       </span>
                     </div>
                     <p className="text-[11px] text-amber-900/80">
-                      {lang === 'ta' 
-                        ? 'பூஜ்ஜிய செலவு, ஆஃப்லைன் அணுகல், மற்றும் சீரான ஒத்திசைவு ஒப்பீட்டு அறிக்கை.' 
+                      {lang === 'ta'
+                        ? 'பூஜ்ஜிய செலவு, ஆஃப்லைன் அணுகல், மற்றும் சீரான ஒத்திசைவு ஒப்பீட்டு அறிக்கை.'
                         : 'Detailed analysis of Zero-Cost PWA, Rural Offline Field Sync, and optimizations.'}
                     </p>
                   </div>
@@ -396,11 +393,10 @@ export const HeaderDrawer: React.FC<Props> = ({
                     <button
                       key={item.id}
                       onClick={() => handleNavClick(item.id)}
-                      className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between transition font-medium ${
-                        isActive
+                      className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between transition font-medium ${isActive
                           ? 'bg-emerald-700 text-white font-bold shadow-2xs'
                           : 'text-stone-700 hover:bg-white hover:text-stone-900'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-stone-500'}`} />
@@ -435,11 +431,10 @@ export const HeaderDrawer: React.FC<Props> = ({
                       onClick={() => {
                         onRoleChange(r.role);
                       }}
-                      className={`w-full text-left p-2.5 rounded-xl border transition flex items-start justify-between gap-2 ${
-                        isCurrent
+                      className={`w-full text-left p-2.5 rounded-xl border transition flex items-start justify-between gap-2 ${isCurrent
                           ? 'bg-emerald-50 border-emerald-600 text-emerald-950 shadow-2xs'
                           : 'bg-white border-stone-200 text-stone-700 hover:bg-stone-50'
-                      }`}
+                        }`}
                     >
                       <div className="space-y-0.5">
                         <div className="font-bold text-xs flex items-center gap-1.5">
@@ -471,8 +466,8 @@ export const HeaderDrawer: React.FC<Props> = ({
                 <PWAInstallButton lang={lang} />
               </div>
               <p className="text-[11px] text-stone-500 leading-tight">
-                {lang === 'ta' 
-                  ? 'ஆப் ஸ்டோர் கட்டணமின்றி நேரடியாக உங்கள் மொபைல் திரையில் நிறுவலாம்.' 
+                {lang === 'ta'
+                  ? 'ஆப் ஸ்டோர் கட்டணமின்றி நேரடியாக உங்கள் மொபைல் திரையில் நிறுவலாம்.'
                   : 'Install with ₹0 store fees directly to your home screen for instant offline access.'}
               </p>
             </div>

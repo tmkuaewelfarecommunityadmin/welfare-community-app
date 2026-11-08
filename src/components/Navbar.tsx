@@ -4,9 +4,9 @@ import { getTranslation } from '../i18n/translations';
 import { PWAInstallButton } from './PWAInstallButton';
 import { HeaderDrawer } from './HeaderDrawer';
 import { OrgLogo } from './OrgLogo';
-import { 
-  Menu, 
-  Sparkles, 
+import {
+  Menu,
+  Sparkles,
   UserCheck,
   ChevronRight,
   Edit3
@@ -75,10 +75,36 @@ export const Navbar: React.FC<Props> = ({
       <header className="sticky top-0 z-40 bg-white border-b border-stone-200 shadow-xs">
         {/* Clean, Single-Row Header Bar without ugly scroll links */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3">
-          
+
           {/* Logo and Organization Title */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button 
+            {/* Navigation Menu Button */}
+            <button
+              type="button"
+              onClick={() => setIsDrawerOpen(true)}
+              className="p-2 sm:p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 active:bg-stone-300 text-stone-800 transition inline-flex items-center justify-center border border-stone-300 shadow-2xs hover:shadow-xs group shrink-0"
+              title={lang === 'ta' ? 'அமைப்புகள் & மெனு' : 'Menu & Settings'}
+              aria-label="Open navigation menu"
+            >
+              <Menu className="w-5 h-5 text-stone-700 group-hover:text-stone-900 transition" />
+            </button>
+            {/* Slide-out Drawer */}
+            <HeaderDrawer
+              isOpen={isDrawerOpen}
+              onClose={() => setIsDrawerOpen(false)}
+              lang={lang}
+              onLanguageChange={onLanguageChange}
+              activeRole={activeRole}
+              onRoleChange={onRoleChange}
+              activeTab={activeTab}
+              onTabChange={onTabChange}
+              onOpenAnalysis={onOpenAnalysis}
+              orgInfo={orgInfo}
+              onOpenOrgSettings={onOpenOrgSettings}
+              authEmail={authEmail}
+              onLogout={onLogout}
+            />
+            <button
               type="button"
               onClick={() => onTabChange('dashboard')}
               className="flex items-center gap-2.5 text-left group focus:outline-none min-w-0 cursor-pointer"
@@ -97,8 +123,8 @@ export const Navbar: React.FC<Props> = ({
                   )}
                 </div>
                 <p className="text-[11px] text-stone-500 font-medium truncate max-w-[180px] sm:max-w-xs md:max-w-md">
-                  {lang === 'ta' 
-                    ? `${orgInfo.villageTa || orgInfo.village} • ${orgInfo.districtTa || orgInfo.district}` 
+                  {lang === 'ta'
+                    ? `${orgInfo.villageTa || orgInfo.village} • ${orgInfo.districtTa || orgInfo.district}`
                     : `${orgInfo.village || orgInfo.villageTa} • ${orgInfo.district || orgInfo.districtTa}`}
                 </p>
               </div>
@@ -128,7 +154,7 @@ export const Navbar: React.FC<Props> = ({
 
           {/* Right Header Controls with Prominent Three-Dot Menu Button */}
           <div className="flex items-center gap-2 sm:gap-2.5">
-            
+
             {/* Quick Architecture Blueprint Button (Desktop - Admins & Executives) */}
             {activeRole !== 'member' && (
               <button
@@ -145,17 +171,15 @@ export const Navbar: React.FC<Props> = ({
             <div className="flex items-center bg-stone-100 p-0.5 rounded-lg border border-stone-200 text-xs">
               <button
                 onClick={() => onLanguageChange('ta')}
-                className={`px-2 py-1 rounded-md font-semibold text-[11px] sm:text-xs transition ${
-                  lang === 'ta' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
-                }`}
+                className={`px-2 py-1 rounded-md font-semibold text-[11px] sm:text-xs transition ${lang === 'ta' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                  }`}
               >
                 தமிழ்
               </button>
               <button
                 onClick={() => onLanguageChange('en')}
-                className={`px-2 py-1 rounded-md font-semibold text-[11px] sm:text-xs transition ${
-                  lang === 'en' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
-                }`}
+                className={`px-2 py-1 rounded-md font-semibold text-[11px] sm:text-xs transition ${lang === 'en' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                  }`}
               >
                 EN
               </button>
@@ -178,36 +202,11 @@ export const Navbar: React.FC<Props> = ({
               <PWAInstallButton lang={lang} />
             </div>
 
-            {/* The Dedicated Three Horizontal Lines Menu Button to Open Full Navigation Drawer */}
-            <button
-              onClick={() => setIsDrawerOpen(true)}
-              className="p-2 sm:p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 active:bg-stone-300 text-stone-800 transition flex items-center justify-center border border-stone-300 shadow-2xs hover:shadow-xs group"
-              title={lang === 'ta' ? 'அமைப்புகள் & மெனு' : 'Menu & Settings'}
-              aria-label="Open navigation menu"
-            >
-              <Menu className="w-5 h-5 text-stone-700 group-hover:text-stone-900 transition" />
-            </button>
-
           </div>
         </div>
       </header>
 
-      {/* Slide-out Drawer */}
-      <HeaderDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        lang={lang}
-        onLanguageChange={onLanguageChange}
-        activeRole={activeRole}
-        onRoleChange={onRoleChange}
-        activeTab={activeTab}
-        onTabChange={onTabChange}
-        onOpenAnalysis={onOpenAnalysis}
-        orgInfo={orgInfo}
-        onOpenOrgSettings={onOpenOrgSettings}
-        authEmail={authEmail}
-        onLogout={onLogout}
-      />
+
     </>
   );
 };
