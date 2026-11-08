@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+    <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Rounded Base Icon -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+
+  <!-- Safe Zone Elements -->
+  <g filter="url(#shadow)">
+    <!-- Protective Village Community Ring -->
+    <circle cx="256" cy="256" r="180" fill="none" stroke="#a7f3d0" stroke-width="8" stroke-dasharray="16 12" opacity="0.6" />
+    
+    <!-- Central Fund Rupee Coin -->
+    <circle cx="256" cy="220" r="105" fill="url(#coinGrad)" stroke="#fef3c7" stroke-width="6"/>
+    
+    <!-- Indian Rupee Symbol (₹) -->
+    <path d="M210 170 h92 M210 195 h92 M210 170 v50 c25 0 52 -10 52 -32 c0 -22 -27 -18 -52 -18 M245 220 l48 65" 
+          stroke="#78350f" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          
+    <!-- Helping Hands / Sprout Base (Community Support) -->
+    <path d="M140 370 C 180 320, 220 310, 256 345 C 292 310, 332 320, 372 370 C 330 395, 180 395, 140 370 Z" 
+          fill="#34d399" opacity="0.95" />
+    <path d="M256 345 v45" stroke="#064e3b" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- Sprout Leaves -->
+    <path d="M256 330 C 235 300, 220 310, 225 330 C 235 340, 250 338, 256 330 Z" fill="#6ee7b7" />
+    <path d="M256 330 C 277 300, 292 310, 287 330 C 277 340, 262 338, 256 330 Z" fill="#6ee7b7" />
+  </g>
+</svg>
