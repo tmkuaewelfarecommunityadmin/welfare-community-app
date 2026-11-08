@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Language, OrganizationInfo, UserRole } from '../types';
 import { authService } from '../services/auth';
 import { OrgLogo } from '../components/OrgLogo';
-import { 
-  ShieldCheck, 
-  Lock, 
-  AlertCircle, 
-  CheckCircle2, 
-  ArrowRight, 
-  Globe, 
-  Users, 
+import {
+  ShieldCheck,
+  Lock,
+  AlertCircle,
+  CheckCircle2,
+  ArrowRight,
+  Globe,
+  Users,
   Sparkles,
   Mail,
   UserCheck
@@ -119,17 +119,15 @@ export const LoginView: React.FC<Props> = ({
           <div className="flex items-center bg-stone-100 p-0.5 rounded-lg border border-stone-200 text-xs">
             <button
               onClick={() => onLanguageChange('ta')}
-              className={`px-2.5 py-1 rounded-md font-bold text-xs transition ${
-                lang === 'ta' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
-              }`}
+              className={`px-2.5 py-1 rounded-md font-bold text-xs transition ${lang === 'ta' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                }`}
             >
               தமிழ்
             </button>
             <button
               onClick={() => onLanguageChange('en')}
-              className={`px-2.5 py-1 rounded-md font-bold text-xs transition ${
-                lang === 'en' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
-              }`}
+              className={`px-2.5 py-1 rounded-md font-bold text-xs transition ${lang === 'en' ? 'bg-emerald-700 text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                }`}
             >
               EN
             </button>
@@ -140,7 +138,7 @@ export const LoginView: React.FC<Props> = ({
       {/* Main Authentication Card */}
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 my-auto">
         <div className="max-w-xl w-full bg-white rounded-3xl border border-stone-200 shadow-xl p-6 sm:p-8 space-y-6 animate-scale-up">
-          
+
           {/* Header & Logo */}
           <div className="text-center space-y-2">
             <div className="inline-block p-1 bg-stone-50 rounded-2xl border border-stone-200 shadow-2xs">
@@ -152,8 +150,8 @@ export const LoginView: React.FC<Props> = ({
                 {lang === 'ta' ? 'கிராம சமுதாய பொது நிதி' : 'Community Welfare Trust'}
               </h2>
               <p className="text-xs sm:text-sm text-stone-500 font-medium">
-                {lang === 'ta' 
-                  ? `${orgInfo.villageTa || orgInfo.village} • ${orgInfo.districtTa || orgInfo.district}` 
+                {lang === 'ta'
+                  ? `${orgInfo.villageTa || orgInfo.village} • ${orgInfo.districtTa || orgInfo.district}`
                   : `${orgInfo.village || orgInfo.villageTa} • ${orgInfo.district || orgInfo.districtTa}`}
               </p>
             </div>
@@ -162,8 +160,8 @@ export const LoginView: React.FC<Props> = ({
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-purple-50 text-purple-900 border border-purple-200">
               <ShieldCheck className="w-3.5 h-3.5 text-purple-700" />
               <span>
-                {lang === 'ta' 
-                  ? 'ஜிமெயில் சரிபார்க்கப்பட்ட உறுப்பினர்களுக்கு மட்டும்' 
+                {lang === 'ta'
+                  ? 'ஜிமெயில் சரிபார்க்கப்பட்ட உறுப்பினர்களுக்கு மட்டும்'
                   : 'Verified Gmail Members Only • RBAC Protected'}
               </span>
             </div>
@@ -180,8 +178,8 @@ export const LoginView: React.FC<Props> = ({
                 {errorMsg}
               </p>
               <div className="pt-1 text-[11px] text-red-700 font-medium">
-                {lang === 'ta' 
-                  ? 'உங்களின் ஜிமெயில் முகவரியை சேர்க்க முதன்மை நிர்வாகி (smdfaizel@gmail.com) அவர்களை தொடர்பு கொள்ளவும்.' 
+                {lang === 'ta'
+                  ? 'உங்களின் ஜிமெயில் முகவரியை சேர்க்க முதன்மை நிர்வாகி (smdfaizel@gmail.com) அவர்களை தொடர்பு கொள்ளவும்.'
                   : 'To request access, please contact Super Admin (smdfaizel@gmail.com) with your member ID.'}
               </div>
             </div>
@@ -226,8 +224,8 @@ export const LoginView: React.FC<Props> = ({
                 />
               </svg>
               <span>
-                {isLoading 
-                  ? (lang === 'ta' ? 'சரிபார்க்கிறது...' : 'Verifying with Google...') 
+                {isLoading
+                  ? (lang === 'ta' ? 'சரிபார்க்கிறது...' : 'Verifying with Google...')
                   : (lang === 'ta' ? 'ஜிமெயில் மூலம் உள்நுழைக' : 'Sign in with Google / Gmail')}
               </span>
             </button>
@@ -257,71 +255,6 @@ export const LoginView: React.FC<Props> = ({
               </div>
             </div>
           </div>
-
-          {/* Allowed Members Quick Select Roster */}
-          <div className="space-y-2.5 pt-2 border-t border-stone-200">
-            <div className="flex items-center justify-between text-xs font-bold text-stone-600">
-              <span className="flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-stone-500" />
-                <span>
-                  {lang === 'ta' ? 'அங்கீகரிக்கப்பட்ட உறுப்பினர்கள் பட்டியல்:' : 'Authorized Member Accounts (Whitelist):'}
-                </span>
-              </span>
-              <span className="text-[10px] text-stone-400 font-mono">
-                {allowedList.length} registered
-              </span>
-            </div>
-
-            <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-              {allowedList.map((item) => {
-                const isSelected = emailInput.toLowerCase() === item.email.toLowerCase();
-                const isFaizel = item.email === 'smdfaizel@gmail.com';
-
-                return (
-                  <button
-                    key={item.email}
-                    type="button"
-                    onClick={() => {
-                      setEmailInput(item.email);
-                      handleAuthenticate(item.email);
-                    }}
-                    className={`w-full text-left p-2.5 rounded-xl border transition flex items-center justify-between gap-2 ${
-                      isSelected
-                        ? 'bg-purple-50 border-purple-400 shadow-2xs'
-                        : 'bg-stone-50 border-stone-200 hover:bg-stone-100 hover:border-stone-300'
-                    }`}
-                  >
-                    <div className="min-w-0">
-                      <div className="font-extrabold text-xs text-stone-900 flex items-center gap-1.5">
-                        <span className="truncate">{item.name}</span>
-                        {isFaizel && (
-                          <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-purple-100 text-purple-900 border border-purple-200">
-                            Super Admin
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[11px] text-stone-500 font-mono truncate">
-                        {item.email}
-                      </div>
-                    </div>
-
-                    <div className="text-right shrink-0">
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-200 text-stone-800">
-                        {getRoleLabel(item.role)}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Offline / PWA Support Note */}
-          <div className="p-3 rounded-2xl bg-stone-50 border border-stone-200 text-stone-500 text-[11px] flex items-center justify-between">
-            <span>Local-First • IndexedDB Cache Active</span>
-            <span className="font-semibold text-emerald-700">✓ Security Verified</span>
-          </div>
-
         </div>
       </main>
 
