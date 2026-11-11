@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Language, OrganizationInfo, UserRole } from '../types';
 import { authService } from '../services/auth';
 import { OrgLogo } from '../components/OrgLogo';
@@ -7,12 +7,10 @@ import {
   Lock, 
   AlertCircle, 
   CheckCircle2, 
-  ArrowRight, 
-  Globe, 
-  Users, 
-  Sparkles,
-  Mail,
-  UserCheck
+  Mail, 
+  User, 
+  KeyRound,
+  LogIn
 } from 'lucide-react';
 
 interface Props {
@@ -28,17 +26,14 @@ export const LoginView: React.FC<Props> = ({
   orgInfo,
   onLoginSuccess
 }) => {
+  const [loginMode, setLoginMode] = useState<'gmail' | 'credentials'>('gmail');
   const [emailInput, setEmailInput] = useState('smdfaizel@gmail.com');
-  const [allowedList, setAllowedList] = useState<{ email: string; name: string; role: UserRole; username: string }[]>([]);
+  const [usernameInput, setUsernameInput] = useState('tmk001');
+  const [passwordInput, setPasswordInput] = useState('');
+  
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successUser, setSuccessUser] = useState<string | null>(null);
-
-  useEffect(() => {
-    authService.getAllowedEmails().then((list) => {
-      setAllowedList(list);
-    });
-  }, []);
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -62,7 +57,7 @@ export const LoginView: React.FC<Props> = ({
     }
   };
 
-  const handleAuthenticate = async (emailToVerify: string) => {
+  const handleGmailVerify = async (emailToVerify: string) => {
     setIsLoading(true);
     setErrorMsg(null);
     setSuccessUser(null);
@@ -84,30 +79,35 @@ export const LoginView: React.FC<Props> = ({
     }
   };
 
-  const getRoleLabel = (role: UserRole) => {
-    switch (role) {
-      case 'admin':
-        return lang === 'ta' ? 'முதன்மை நிர்வாகி' : 'Super Admin';
-      case 'president':
-        return lang === 'ta' ? 'தலைவர்' : 'President';
-      case 'treasurer':
-        return lang === 'ta' ? 'பொருளாளர்' : 'Treasurer';
-      case 'secretary':
-        return lang === 'ta' ? 'செயலாளர்' : 'General Secretary';
-      case 'committee':
-        return lang === 'ta' ? 'செயற்குழு உறுப்பினர்' : 'Committee';
-      case 'auditor':
-        return lang === 'ta' ? 'தணிக்கையாளர்' : 'Auditor';
-      case 'member':
-      default:
-        return lang === 'ta' ? 'சந்தாதாரர்' : 'Member';
+  const handleUsernamePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!usernameInput || !passwordInput) return;
+
+    setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessUser(null);
+
+    try {
+      const result = await authService.loginWithUsernamePassword(usernameInput, passwordInput);
+      if (result.success && result.session) {
+        setSuccessUser(`${result.session.user.fullName} (@${result.session.user.username})`);
+        setTimeout(() => {
+          onLoginSuccess(result.session!.user.role);
+        }, 600);
+      } else {
+        setErrorMsg(result.error || 'Invalid username or password.');
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Login error occurred.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-stone-100 flex flex-col justify-between selection:bg-emerald-200">
       {/* Top Bar with Language Toggle */}
-      <header className="px-4 sm:px-8 py-3.5 flex items-center justify-between border-b border-stone-200 bg-white">
+      <header className="px-4 sm:px-8 py-3.5 flex items-center justify-between border-b border-stone-200 bg-white shadow-2xs">
         <div className="flex items-center gap-2.5">
           <OrgLogo orgInfo={orgInfo} size="sm" />
           <span className="font-extrabold text-sm sm:text-base text-stone-900 tracking-tight">
@@ -159,14 +159,42 @@ export const LoginView: React.FC<Props> = ({
             </div>
 
             {/* Restricted Access Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-purple-50 text-purple-900 border border-purple-200">
-              <ShieldCheck className="w-3.5 h-3.5 text-purple-700" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-900 border border-emerald-200">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
               <span>
                 {lang === 'ta' 
-                  ? 'ஜிமெயில் சரிபார்க்கப்பட்ட உறுப்பினர்களுக்கு மட்டும்' 
-                  : 'Verified Gmail Members Only • RBAC Protected'}
+                  ? 'பாதுகாப்பான உறுப்பினர் உள்நுழைவு தளம்' 
+                  : 'Secure Member Authentication • Dual Login Portal'}
               </span>
             </div>
+          </div>
+
+          {/* Dual Login Mode Tabs */}
+          <div className="grid grid-cols-2 p-1 bg-stone-100 rounded-2xl border border-stone-200 text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => { setLoginMode('gmail'); setErrorMsg(null); setSuccessUser(null); }}
+              className={`py-2.5 rounded-xl transition flex items-center justify-center gap-2 ${
+                loginMode === 'gmail' 
+                  ? 'bg-white text-stone-900 shadow-sm border border-stone-200/80' 
+                  : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              <Mail className="w-4 h-4 text-emerald-700" />
+              <span>{lang === 'ta' ? 'ஜிமெயில் உள்நுழைவு' : 'Gmail / Google Sign-In'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setLoginMode('credentials'); setErrorMsg(null); setSuccessUser(null); }}
+              className={`py-2.5 rounded-xl transition flex items-center justify-center gap-2 ${
+                loginMode === 'credentials' 
+                  ? 'bg-white text-stone-900 shadow-sm border border-stone-200/80' 
+                  : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              <User className="w-4 h-4 text-emerald-700" />
+              <span>{lang === 'ta' ? 'பயனர்பெயர் & கடவுச்சொல்' : 'Username & Password'}</span>
+            </button>
           </div>
 
           {/* Error Message Alert */}
@@ -174,21 +202,16 @@ export const LoginView: React.FC<Props> = ({
             <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-900 space-y-1.5 text-xs animate-shake">
               <div className="flex items-center gap-2 font-bold text-sm text-red-950">
                 <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                <span>{lang === 'ta' ? 'அனுமதி மறுக்கப்பட்டது (Access Denied)' : 'Authentication Failed'}</span>
+                <span>{lang === 'ta' ? 'உள்நுழைவு தோல்வி' : 'Authentication Failed'}</span>
               </div>
               <p className="leading-relaxed text-red-800">
                 {errorMsg}
               </p>
-              <div className="pt-1 text-[11px] text-red-700 font-medium">
-                {lang === 'ta' 
-                  ? 'உங்களின் ஜிமெயில் முகவரியை சேர்க்க முதன்மை நிர்வாகி (smdfaizel@gmail.com) அவர்களை தொடர்பு கொள்ளவும்.' 
-                  : 'To request access, please contact Super Admin (smdfaizel@gmail.com) with your member ID.'}
-              </div>
             </div>
           )}
 
           {/* Success Flash */}
-          {successUser && (
+            {successUser && (
             <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 flex items-center gap-2.5 text-xs sm:text-sm animate-fade-in font-bold">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
               <span>
@@ -197,72 +220,134 @@ export const LoginView: React.FC<Props> = ({
             </div>
           )}
 
-          {/* Google Sign-In Action */}
-          <div className="space-y-4">
-            {/* Primary Google Login Button */}
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              disabled={isLoading}
-              className="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-stone-50 active:bg-stone-100 border-2 border-stone-300 hover:border-stone-400 text-stone-800 font-extrabold text-sm sm:text-base flex items-center justify-center gap-3 transition shadow-xs disabled:opacity-50 cursor-pointer"
-            >
-              {/* Google Official G Logo SVG */}
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                />
-              </svg>
-              <span>
-                {isLoading 
-                  ? (lang === 'ta' ? 'சரிபார்க்கிறது...' : 'Verifying with Google...') 
-                  : (lang === 'ta' ? 'ஜிமெயில் மூலம் உள்நுழைக' : 'Sign in with Google / Gmail')}
-              </span>
-            </button>
+          {/* Tab 1: Gmail Sign-In / Verification */}
+          {loginMode === 'gmail' && (
+            <div className="space-y-4 animate-fade-in">
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+                className="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-stone-50 active:bg-stone-100 border-2 border-stone-300 hover:border-stone-400 text-stone-800 font-extrabold text-sm sm:text-base flex items-center justify-center gap-3 transition shadow-xs disabled:opacity-50 cursor-pointer"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  />
+                </svg>
+                <span>
+                  {isLoading 
+                    ? (lang === 'ta' ? 'சரிபார்க்கிறது...' : 'Verifying with Google...') 
+                    : (lang === 'ta' ? 'ஜிமெயில் மூலம் உள்நுழைக' : 'Sign in with Google / Gmail')}
+                </span>
+              </button>
 
-            {/* Email Address Input for Verification */}
-            <div className="space-y-1.5 pt-1">
-              <label className="block text-xs font-bold text-stone-700">
-                {lang === 'ta' ? 'சரிபார்க்க வேண்டிய ஜிமெயில் முகவரி:' : 'Enter Gmail Address to verify:'}
-              </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="email"
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  placeholder="yourname@gmail.com"
-                  className="w-full pl-10 pr-24 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-purple-600 focus:outline-none bg-stone-50"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleAuthenticate(emailInput)}
-                  disabled={isLoading || !emailInput.trim()}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs transition disabled:opacity-50"
-                >
-                  {lang === 'ta' ? 'சரிபார்' : 'Verify'}
-                </button>
+              <div className="space-y-1.5 pt-1">
+                <label className="block text-xs font-bold text-stone-700">
+                  {lang === 'ta' ? 'சரிபார்க்க வேண்டிய ஜிமெயில் முகவரி:' : 'Enter Gmail Address to verify:'}
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="yourname@gmail.com"
+                    className="w-full pl-10 pr-24 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-stone-50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleGmailVerify(emailInput)}
+                    disabled={isLoading || !emailInput.trim()}
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition disabled:opacity-50"
+                  >
+                    {lang === 'ta' ? 'சரிபார்' : 'Verify'}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Tab 2: Username & Password Login */}
+          {loginMode === 'credentials' && (
+            <form onSubmit={handleUsernamePasswordSubmit} className="space-y-4 animate-fade-in">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-stone-700">
+                  {lang === 'ta' ? 'பயனர்பெயர் (Username):' : 'Username:'}
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={usernameInput}
+                    onChange={(e) => setUsernameInput(e.target.value)}
+                    placeholder="e.g. tmk001 or uae001"
+                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-stone-50 font-mono"
+                    required
+                  />
+                </div>
+                <p className="text-[11px] text-stone-500">
+                  {lang === 'ta' 
+                    ? 'உதாரணம்: உள்ளூர் உறுப்பினர்களுக்கு tmk001, வளைகுடா உறுப்பினர்களுக்கு uae001' 
+                    : 'Format: tmk001 (Local INR) or uae001 (Gulf AED)'}
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-stone-700">
+                  {lang === 'ta' ? 'கடவுச்சொல் (Password):' : 'Password (Registered Phone):'}
+                </label>
+                <div className="relative">
+                  <KeyRound className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="password"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    placeholder="Enter your registered phone number"
+                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-emerald-600 focus:outline-none bg-stone-50"
+                    required
+                  />
+                </div>
+                <p className="text-[11px] text-stone-500">
+                  {lang === 'ta' 
+                    ? 'உங்கள் பதிவு செய்யப்பட்ட தொலைபேசி எண் உங்கள் கடவுச்சொல் ஆகும்.' 
+                    : 'Your registered member phone number serves as your secure password.'}
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading || !usernameInput.trim() || !passwordInput.trim()}
+                className="w-full py-3.5 px-5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 transition shadow-md disabled:opacity-50 cursor-pointer"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>
+                  {isLoading 
+                    ? (lang === 'ta' ? 'உள்நுழைகிறது...' : 'Signing in...') 
+                    : (lang === 'ta' ? 'உள்நுழைக (Sign In)' : 'Sign In with Credentials')}
+                </span>
+              </button>
+            </form>
+          )}
+
         </div>
       </main>
 
       {/* Footer */}
       <footer className="py-4 text-center text-xs text-stone-400 border-t border-stone-200 bg-white">
-        <span>GramaNidhi • Transparent Rural Welfare & Diaspora Remittance Platform</span>
+        <span>{lang === 'ta' ? (orgInfo.footerTextTa || orgInfo.footerText) : (orgInfo.footerText || orgInfo.footerTextTa)}</span>
       </footer>
     </div>
   );

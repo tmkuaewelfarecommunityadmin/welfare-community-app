@@ -480,8 +480,7 @@ export const HeaderDrawer: React.FC<Props> = ({
           </div>
 
           {/* Drawer Footer */}
-          <div className="p-4 bg-stone-100 border-t border-stone-200 flex items-center justify-between text-[11px] text-stone-500">
-            <span>Local-First • IndexedDB Offline</span>
+          <div className="p-4 bg-stone-100 border-t border-stone-200 flex items-center justify-end text-[11px] text-stone-500">
             <button
               onClick={onClose}
               className="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-semibold transition"

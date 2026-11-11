@@ -142,15 +142,65 @@ class LocalDatabase {
     return this.getAll<Member>('members');
   }
 
+  public async generateNextUsername(currency: Currency): Promise<string> {
+    const prefix = currency === 'AED' ? 'uae' : 'tmk';
+    const users = await this.getUsers();
+    const matching = users.filter((u) => u.username && u.username.toLowerCase().startsWith(prefix));
+    let maxSeq = 0;
+    for (const u of matching) {
+      const numPart = u.username.slice(3);
+      const parsed = parseInt(numPart, 10);
+      if (!isNaN(parsed) && parsed > maxSeq) {
+        maxSeq = parsed;
+      }
+    }
+    const nextSeq = maxSeq + 1;
+    return prefix + String(nextSeq).padStart(3, '0');
+  }
+
   public async saveMember(member: Member, actor: string = 'Admin'): Promise<void> {
     await this.putItem('members', member);
+
+    // Auto-generate or update app user account for member with username and phone as password
+    const users = await this.getUsers();
+    let user = users.find((u) => u.memberId === member.id);
+    if (!user) {
+      const newUsername = await this.generateNextUsername(member.currency);
+      user = {
+        id: 'usr_' + member.id + '_' + Date.now().toString(36),
+        username: newUsername,
+        fullName: member.name,
+        fullNameTa: member.nameTa,
+        phone: member.phone,
+        email: member.email || '',
+        role: member.role,
+        memberId: member.id,
+        status: member.status === 'active' ? 'active' : 'suspended',
+        createdAt: new Date().toISOString(),
+        notes: `Auto-generated on member creation (${member.villageWard})`,
+        password: member.phone
+      };
+      await this.putItem('app_users', user);
+    } else {
+      user.fullName = member.name;
+      user.fullNameTa = member.nameTa;
+      user.phone = member.phone;
+      if (member.email) user.email = member.email;
+      user.role = member.role;
+      user.status = member.status === 'active' ? 'active' : 'suspended';
+      if (!user.password) {
+        user.password = member.phone;
+      }
+      await this.putItem('app_users', user);
+    }
+
     const currSymbol = member.currency === 'AED' ? 'AED' : '₹';
     await this.addAuditLog(
       actor,
       'MEMBER_SAVED',
       'உறுப்பினர் பதிவு செய்யப்பட்டது',
-      `Member ${member.name} (${member.role}) saved with pledge ${currSymbol} ${member.monthlyPledge} (${member.isGulfMember ? 'UAE ' + (member.gulfCity || '') : 'Local'})`,
-      `உறுப்பினர் ${member.nameTa} (${member.role}) சேமிக்கப்பட்டது (சந்தா: ${currSymbol} ${member.monthlyPledge})`
+      `Member ${member.name} (${member.role}) saved with pledge ${currSymbol} ${member.monthlyPledge} (Username: @${user.username})`,
+      `உறுப்பினர் ${member.nameTa} (${member.role}) சேமிக்கப்பட்டது (பயனர்பெயர்: @${user.username})`
     );
     await this.enqueueMutation('member', 'UPDATE', member);
     this.notify();
@@ -1253,11 +1303,12 @@ class LocalDatabase {
         status: 'active',
         lastLogin: new Date().toISOString(),
         createdAt: '2025-01-01T00:00:00Z',
-        notes: 'Primary Super Administrator with unrestricted governance control'
+        notes: 'Primary Super Administrator with unrestricted governance control',
+        password: '+971 50 889 0123'
       },
       {
         id: 'usr_m1',
-        username: 'muthu_pres',
+        username: 'tmk001',
         fullName: 'M. Muthukumar',
         fullNameTa: 'மு. முத்துக்குமார்',
         phone: '98421 10293',
@@ -1267,11 +1318,12 @@ class LocalDatabase {
         status: 'active',
         lastLogin: '2026-11-06T15:20:00Z',
         createdAt: '2025-01-10T10:00:00Z',
-        notes: 'Village Trust President - Executive decision & approvals'
+        notes: 'Village Trust President - Executive decision & approvals',
+        password: '98421 10293'
       },
       {
         id: 'usr_m2',
-        username: 'selvi_treas',
+        username: 'tmk002',
         fullName: 'S. Selvarani',
         fullNameTa: 'செ. செல்வராணி',
         phone: '94432 87612',
@@ -1281,11 +1333,12 @@ class LocalDatabase {
         status: 'active',
         lastLogin: '2026-11-07T09:15:00Z',
         createdAt: '2025-01-10T10:00:00Z',
-        notes: 'Fund Treasurer - Collections, Dues, and Payout Disbursals'
+        notes: 'Fund Treasurer - Collections, Dues, and Payout Disbursals',
+        password: '94432 87612'
       },
       {
         id: 'usr_m3',
-        username: 'anbu_sec',
+        username: 'tmk003',
         fullName: 'K. Anbalagan',
         fullNameTa: 'கு. அன்பழகன்',
         phone: '97890 23411',
@@ -1295,11 +1348,12 @@ class LocalDatabase {
         status: 'active',
         lastLogin: '2026-11-05T14:10:00Z',
         createdAt: '2025-01-10T10:00:00Z',
-        notes: 'General Secretary - Member Operations & Role Assignments'
+        notes: 'General Secretary - Member Operations & Role Assignments',
+        password: '97890 23411'
       },
       {
         id: 'usr_m5',
-        username: 'syed_uae',
+        username: 'uae001',
         fullName: 'S. Syed Ibrahim',
         fullNameTa: 'செ. சையது இப்ராஹிம்',
         phone: '+971 50 123 4567',
@@ -1309,11 +1363,12 @@ class LocalDatabase {
         status: 'active',
         lastLogin: '2026-11-06T20:45:00Z',
         createdAt: '2025-02-15T12:00:00Z',
-        notes: 'UAE Chapter Convenor - Welfare Committee'
+        notes: 'UAE Chapter Convenor - Welfare Committee',
+        password: '+971 50 123 4567'
       },
       {
         id: 'usr_m8',
-        username: 'sundar_audit',
+        username: 'tmk004',
         fullName: 'V. Sundaram',
         fullNameTa: 'வெ. சுந்தரம்',
         phone: '99441 55601',
@@ -1323,11 +1378,12 @@ class LocalDatabase {
         status: 'active',
         lastLogin: '2026-11-04T16:30:00Z',
         createdAt: '2025-01-15T11:00:00Z',
-        notes: 'Independent Financial Auditor - Read-only access & ledger audit'
+        notes: 'Independent Financial Auditor - Read-only access & ledger audit',
+        password: '99441 55601'
       },
       {
         id: 'usr_m6',
-        username: 'rajen_uae',
+        username: 'uae002',
         fullName: 'K. Rajendran',
         fullNameTa: 'கா. ராஜேந்திரன்',
         phone: '+971 55 987 6543',
@@ -1337,7 +1393,8 @@ class LocalDatabase {
         status: 'active',
         lastLogin: '2026-11-03T18:00:00Z',
         createdAt: '2025-01-15T12:00:00Z',
-        notes: 'UAE Diaspora Community Member'
+        notes: 'UAE Diaspora Community Member',
+        password: '+971 55 987 6543'
       }
     ];
 

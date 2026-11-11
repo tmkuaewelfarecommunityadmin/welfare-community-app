@@ -99,6 +99,7 @@ export interface AppUser {
   lastLogin?: string;
   createdAt: string;
   notes?: string;
+  password?: string;
 }
 
 export interface AuthSession {
