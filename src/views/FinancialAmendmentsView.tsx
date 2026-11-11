@@ -118,8 +118,8 @@ export const FinancialAmendmentsView: React.FC<Props> = ({ lang, activeRole }) =
     }
   };
 
-  const canReview = ['admin', 'president', 'treasurer', 'secretary', 'committee', 'auditor'].includes(activeRole);
-  const canApply = ['admin', 'treasurer', 'president'].includes(activeRole);
+  const canReview = ['admin', 'treasurer', 'committee', 'auditor'].includes(activeRole);
+  const canApply = ['admin', 'treasurer'].includes(activeRole);
 
   const filteredAmendments = amendments.filter((a) => {
     if (activeTab === 'pending') return a.status === 'submitted' || a.status === 'under_review';

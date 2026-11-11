@@ -31,8 +31,6 @@ export const translations = {
     inrCollections: 'INR Collections',
 
     // Roles
-    role_president: 'President / Chairperson',
-    role_secretary: 'General Secretary',
     role_treasurer: 'Treasurer',
     role_committee: 'Committee Member',
     role_member: 'Contributing Member',
@@ -182,8 +180,6 @@ export const translations = {
     inrCollections: 'உள்ளூர் ரூபாய் வசூல்',
 
     // Roles
-    role_president: 'தலைவர்',
-    role_secretary: 'செயலாளர்',
     role_treasurer: 'பொருளாளர்',
     role_committee: 'செயற்குழு உறுப்பினர்',
     role_member: 'சந்தாதாரர்',

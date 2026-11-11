@@ -112,9 +112,9 @@ export const DashboardView: React.FC<Props> = ({
     return <div className="p-8 text-center text-stone-500 text-xs">Loading village fund accounts...</div>;
   }
 
-  const canRecordPayment = activeRole === 'admin' || activeRole === 'treasurer' || activeRole === 'president' || activeRole === 'secretary';
-  const canReviewAssistance = activeRole === 'admin' || activeRole === 'president' || activeRole === 'secretary' || activeRole === 'committee' || activeRole === 'treasurer';
-  const canExportDashboardPdf = ['admin', 'president', 'secretary', 'treasurer'].includes(activeRole);
+  const canRecordPayment = activeRole === 'admin' || activeRole === 'treasurer';
+  const canReviewAssistance = activeRole === 'admin' || activeRole === 'treasurer' || activeRole === 'committee';
+  const canExportDashboardPdf = ['admin', 'treasurer'].includes(activeRole);
 
   // Monthly Financial Performance calculations for perfMonth
   const monthPayments = allPayments.filter(

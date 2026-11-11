@@ -44,9 +44,7 @@ export const Navbar: React.FC<Props> = ({
 
   const roles: { role: UserRole; labelEn: string; labelTa: string }[] = [
     { role: 'admin', labelEn: 'Super Admin', labelTa: 'முதன்மை நிர்வாகி' },
-    { role: 'president', labelEn: 'President', labelTa: 'தலைவர்' },
     { role: 'treasurer', labelEn: 'Treasurer', labelTa: 'பொருளாளர்' },
-    { role: 'secretary', labelEn: 'Secretary', labelTa: 'செயலாளர்' },
     { role: 'committee', labelEn: 'Committee', labelTa: 'செயற்குழு' },
     { role: 'member', labelEn: 'Member', labelTa: 'சந்தாதாரர்' },
     { role: 'auditor', labelEn: 'Auditor', labelTa: 'தணிக்கையாளர்' },

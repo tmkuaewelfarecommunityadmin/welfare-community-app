@@ -261,8 +261,8 @@ export const ContributionsView: React.FC<Props> = ({
   const paidCount = dues.filter((d) => d.status === 'paid').length;
   const unpaidCount = dues.length - paidCount;
 
-  const canRecord = activeRole === 'admin' || activeRole === 'treasurer' || activeRole === 'president' || activeRole === 'secretary';
-  const isAdmin = activeRole === 'admin' || activeRole === 'treasurer' || activeRole === 'president';
+  const canRecord = activeRole === 'admin' || activeRole === 'treasurer';
+  const isAdmin = activeRole === 'admin' || activeRole === 'treasurer';
 
   const isMember = activeRole === 'member';
   const effMemberId = currentMemberId || members[0]?.id;

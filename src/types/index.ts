@@ -6,8 +6,6 @@ export const DEFAULT_AED_EXCHANGE_RATE = 22.80; // 1 AED = 22.80 INR
 
 export type UserRole = 
   | 'admin'          // முதன்மை நிர்வாகி (Super Admin)
-  | 'president'      // தலைவர்
-  | 'secretary'      // செயலாளர்
   | 'treasurer'      // பொருளாளர்
   | 'committee'      // செயற்குழு உறுப்பினர்
   | 'member'         // பொது உறுப்பினர்
@@ -38,31 +36,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, AppPermission[]> = {
     'export_audit',
     'view_reports'
   ],
-  president: [
-    'manage_users',
-    'record_payments',
-    'generate_remittance',
-    'create_assistance',
-    'review_assistance',
-    'disburse_payouts',
-    'view_ledger',
-    'export_audit',
-    'view_reports'
-  ],
   treasurer: [
     'record_payments',
     'generate_remittance',
     'create_assistance',
     'review_assistance',
     'disburse_payouts',
-    'view_ledger',
-    'view_reports'
-  ],
-  secretary: [
-    'manage_users',
-    'record_payments',
-    'create_assistance',
-    'review_assistance',
     'view_ledger',
     'view_reports'
   ],

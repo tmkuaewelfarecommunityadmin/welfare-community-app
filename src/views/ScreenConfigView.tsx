@@ -36,7 +36,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'முகப்பு & சுருக்கம்',
     descEn: 'Key financial metrics, collection summaries, and quick action widgets.',
     descTa: 'நிதி அளவீடுகள், வசூல் சுருக்கங்கள் மற்றும் விரைவான செயல்பாடுகள்.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'committee', 'member', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'committee', 'member', 'auditor']
   },
   {
     id: 'contributions',
@@ -44,7 +44,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'சந்தா & வரவுகள்',
     descEn: 'Member pledges, dues tracking, payment receipts, and collections.',
     descTa: 'உறுப்பினர் உறுதிமொழி, நிலுவை கண்காணிப்பு மற்றும் ரசீதுகள்.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'committee', 'member', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'committee', 'member', 'auditor']
   },
   {
     id: 'assistance',
@@ -52,7 +52,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'நலஉதவி கோரிக்கைகள்',
     descEn: 'Medical, education, and disaster relief assistance requests and voting.',
     descTa: 'மருத்துவ, கல்வி மற்றும் அவசர கால நலஉதவி கோரிக்கைகள்.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'committee', 'member', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'committee', 'member', 'auditor']
   },
   {
     id: 'ledger',
@@ -60,7 +60,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'இரட்டை பதிவு பேரேடு',
     descEn: 'Immutable double-entry ledger with debits, credits, and running balances.',
     descTa: 'வரவு-செலவு இரட்டை பதிவு பேரேடு.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'auditor']
   },
   {
     id: 'members',
@@ -68,7 +68,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'உறுப்பினர்கள் பட்டியல்',
     descEn: 'Local and UAE Gulf chapter members directory.',
     descTa: 'உள்ளூர் மற்றும் வளைகுடா வாழ் உறுப்பினர்கள் விவரப் பட்டியல்.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'committee', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'committee', 'auditor']
   },
   {
     id: 'users',
@@ -76,7 +76,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'பயனாளர் & பொறுப்பு நிர்வாகம்',
     descEn: 'RBAC role assignment and member-to-user mapping.',
     descTa: 'பொறுப்புகளை ஒதுக்குதல் மற்றும் பயனர் மேலாண்மை.',
-    defaultRoles: ['admin', 'president', 'secretary']
+    defaultRoles: ['admin', 'treasurer']
   },
   {
     id: 'sync',
@@ -84,7 +84,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'ஆஃப்லைன் ஒத்திசைவு மையம்',
     descEn: 'IndexedDB storage backups, JSON snapshots, and Excel-compatible CSV exports.',
     descTa: 'தரவுத்தள காப்புப்பிரதி மற்றும் எக்செல் CSV ஏற்றுமதி மையம்.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'auditor']
   },
   {
     id: 'audit',
@@ -92,7 +92,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'தணிக்கைப் பதிவு',
     descEn: 'Immutable tamper-evident record of all governance and financial actions.',
     descTa: 'அனைத்து நிதி மற்றும் நிர்வாக நடவடிக்கைகளின் காலவரிசைப் பதிவு.',
-    defaultRoles: ['admin', 'president', 'auditor']
+    defaultRoles: ['admin', 'auditor']
   },
   {
     id: 'amendments',
@@ -100,7 +100,7 @@ export const APP_SCREENS: ScreenDefinition[] = [
     nameTa: 'நிதித் திருத்த ஒப்புதல்கள்',
     descEn: 'Committee quorum approval workflows for modifying published financial data.',
     descTa: 'வெளியிடப்பட்ட நிதித் தரவுகளில் மாற்றங்கள் செய்ய செயற்குழு ஒப்புதல்.',
-    defaultRoles: ['admin', 'president', 'treasurer', 'secretary', 'committee', 'member', 'auditor']
+    defaultRoles: ['admin', 'treasurer', 'committee', 'member', 'auditor']
   },
   {
     id: 'screen_config',
@@ -112,13 +112,11 @@ export const APP_SCREENS: ScreenDefinition[] = [
   }
 ];
 
-export const ALL_ROLES: UserRole[] = ['admin', 'president', 'treasurer', 'secretary', 'committee', 'member', 'auditor'];
+export const ALL_ROLES: UserRole[] = ['admin', 'treasurer', 'committee', 'member', 'auditor'];
 
 export const ROLE_LABELS: Record<UserRole, { en: string; ta: string }> = {
   admin: { en: 'Super Admin', ta: 'முதன்மை நிர்வாகி' },
-  president: { en: 'President', ta: 'தலைவர்' },
   treasurer: { en: 'Treasurer', ta: 'பொருளாளர்' },
-  secretary: { en: 'Secretary', ta: 'செயலாளர்' },
   committee: { en: 'Committee', ta: 'செயற்குழு' },
   member: { en: 'Member', ta: 'சந்தாதாரர்' },
   auditor: { en: 'Auditor', ta: 'தணிக்கையாளர்' },

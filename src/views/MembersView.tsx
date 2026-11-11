@@ -101,7 +101,7 @@ export const MembersView: React.FC<Props> = ({ lang, activeRole, onPayForMember 
     return true;
   });
 
-  const canAddMember = activeRole === 'admin' || activeRole === 'president' || activeRole === 'secretary';
+  const canAddMember = activeRole === 'admin' || activeRole === 'treasurer';
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -185,9 +185,7 @@ export const MembersView: React.FC<Props> = ({ lang, activeRole, onPayForMember 
             >
               <option value="all">{lang === 'ta' ? 'அனைத்தும்' : 'All Roles'}</option>
               <option value="admin">Super Admin</option>
-              <option value="president">President</option>
               <option value="treasurer">Treasurer</option>
-              <option value="secretary">Secretary</option>
               <option value="committee">Committee</option>
               <option value="member">Member</option>
               <option value="auditor">Auditor</option>
@@ -233,8 +231,8 @@ export const MembersView: React.FC<Props> = ({ lang, activeRole, onPayForMember 
 
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                     member.role === 'admin' ? 'bg-purple-100 text-purple-900 border border-purple-200' :
-                    member.role === 'president' || member.role === 'treasurer' ? 'bg-amber-100 text-amber-900' :
-                    member.role === 'secretary' || member.role === 'committee' ? 'bg-teal-100 text-teal-900' : 
+                    member.role === 'treasurer' ? 'bg-amber-100 text-amber-900' :
+                    member.role === 'committee' ? 'bg-teal-100 text-teal-900' : 
                     member.role === 'auditor' ? 'bg-cyan-100 text-cyan-900' : 'bg-stone-100 text-stone-700'
                   }`}>
                     {member.role}
@@ -453,9 +451,7 @@ export const MembersView: React.FC<Props> = ({ lang, activeRole, onPayForMember 
                   >
                     <option value="member">Member</option>
                     <option value="committee">Committee Member</option>
-                    <option value="secretary">Secretary</option>
                     <option value="treasurer">Treasurer</option>
-                    <option value="president">President</option>
                     <option value="admin">Super Admin</option>
                     <option value="auditor">Auditor</option>
                   </select>

@@ -272,15 +272,6 @@ export const UserManagementView: React.FC<Props> = ({
           descEn: 'Full RBAC authority & financial governance',
           descTa: 'முழு நிர்வாக உரிமை மற்றும் நிதி கட்டுப்பாடு'
         };
-      case 'president':
-        return {
-          labelEn: 'President',
-          labelTa: 'தலைவர்',
-          bg: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-          dot: 'bg-emerald-600',
-          descEn: 'Executive approvals & trust representation',
-          descTa: 'நிர்வாக ஒப்புதல்கள் மற்றும் தலைமை'
-        };
       case 'treasurer':
         return {
           labelEn: 'Treasurer',
@@ -290,15 +281,7 @@ export const UserManagementView: React.FC<Props> = ({
           descEn: 'Collections, payouts, remittance & ledger',
           descTa: 'சந்தா வசூல், வரவு-செலவு மற்றும் நிதி பட்டுவாடா'
         };
-      case 'secretary':
-        return {
-          labelEn: 'General Secretary',
-          labelTa: 'செயலாளர்',
-          bg: 'bg-amber-100 text-amber-900 border-amber-300',
-          dot: 'bg-amber-600',
-          descEn: 'Member registry, user mapping & coordination',
-          descTa: 'உறுப்பினர் சேர்க்கை, பொறுப்பு ஒதுக்கீடு'
-        };
+
       case 'committee':
         return {
           labelEn: 'Committee Member',
@@ -405,9 +388,7 @@ export const UserManagementView: React.FC<Props> = ({
 
   const allRolesList: UserRole[] = [
     'admin',
-    'president',
     'treasurer',
-    'secretary',
     'committee',
     'auditor',
     'member'
@@ -430,7 +411,7 @@ export const UserManagementView: React.FC<Props> = ({
 
   const activeCount = users.filter((u) => u.status === 'active').length;
   const mappedMembersCount = users.filter((u) => u.memberId).length;
-  const executiveCount = users.filter((u) => ['admin', 'president', 'treasurer', 'secretary'].includes(u.role)).length;
+  const executiveCount = users.filter((u) => ['admin', 'treasurer'].includes(u.role)).length;
 
   return (
     <div className="space-y-6">
@@ -704,9 +685,7 @@ export const UserManagementView: React.FC<Props> = ({
                         <div className="flex items-center gap-3">
                           <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-white shadow-2xs ${
                             user.role === 'admin' ? 'bg-purple-700' :
-                            user.role === 'president' ? 'bg-emerald-700' :
                             user.role === 'treasurer' ? 'bg-blue-700' :
-                            user.role === 'secretary' ? 'bg-amber-600' :
                             user.role === 'auditor' ? 'bg-teal-700' :
                             'bg-stone-600'
                           }`}>

@@ -239,8 +239,8 @@ export const AssistanceView: React.FC<Props> = ({
     return true;
   });
 
-  const canApprove = activeRole === 'admin' || activeRole === 'president' || activeRole === 'secretary' || activeRole === 'committee' || activeRole === 'treasurer';
-  const canDisburse = activeRole === 'admin' || activeRole === 'treasurer' || activeRole === 'president';
+  const canApprove = activeRole === 'admin' || activeRole === 'committee' || activeRole === 'treasurer';
+  const canDisburse = activeRole === 'admin' || activeRole === 'treasurer';
 
   return (
     <div className="space-y-6 animate-fade-in">

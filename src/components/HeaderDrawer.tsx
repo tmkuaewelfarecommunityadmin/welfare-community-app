@@ -96,25 +96,11 @@ export const HeaderDrawer: React.FC<Props> = ({
       descTa: 'முழு நிர்வாக உரிமை, பொறுப்பு ஒதுக்கீடு மற்றும் அனைத்து நிதி செயல்பாடுகள்'
     },
     { 
-      role: 'president', 
-      labelEn: 'President', 
-      labelTa: 'தலைவர்',
-      descEn: 'Governance oversight, high-value assistance approvals',
-      descTa: 'பொது மேற்பார்வை மற்றும் உயர் நிதி ஒப்புதல்'
-    },
-    { 
       role: 'treasurer', 
       labelEn: 'Treasurer', 
       labelTa: 'பொருளாளர்',
       descEn: 'Field collections, cash/UPI receipts, ledger & payouts',
       descTa: 'சந்தா வரவு ரசீதுகள், பேரேடு மற்றும் நிதி வழங்கல்'
-    },
-    { 
-      role: 'secretary', 
-      labelEn: 'General Secretary', 
-      labelTa: 'செயலாளர்',
-      descEn: 'Member registry, request review coordination',
-      descTa: 'உறுப்பினர் சேர்க்கை மற்றும் கோரிக்கை ஒருங்கிணைப்பு'
     },
     { 
       role: 'committee', 

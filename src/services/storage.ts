@@ -1313,12 +1313,12 @@ class LocalDatabase {
         fullNameTa: 'மு. முத்துக்குமார்',
         phone: '98421 10293',
         email: 'muthukumar@gmail.com',
-        role: 'president',
+        role: 'committee',
         memberId: 'm1',
         status: 'active',
         lastLogin: '2026-11-06T15:20:00Z',
         createdAt: '2025-01-10T10:00:00Z',
-        notes: 'Village Trust President - Executive decision & approvals',
+        notes: 'Village Trust Committee Member',
         password: '98421 10293'
       },
       {
@@ -1343,12 +1343,12 @@ class LocalDatabase {
         fullNameTa: 'கு. அன்பழகன்',
         phone: '97890 23411',
         email: 'anbalagan@gmail.com',
-        role: 'secretary',
+        role: 'committee',
         memberId: 'm3',
         status: 'active',
         lastLogin: '2026-11-05T14:10:00Z',
         createdAt: '2025-01-10T10:00:00Z',
-        notes: 'General Secretary - Member Operations & Role Assignments',
+        notes: 'Village Trust Committee Member',
         password: '97890 23411'
       },
       {
@@ -1409,9 +1409,9 @@ class LocalDatabase {
     const prevMonth = '2026-10';
 
     const initialMembers: Member[] = [
-      { id: 'm1', name: 'M. Muthukumar', nameTa: 'மு. முத்துக்குமார்', phone: '98421 10293', villageWard: 'Ward 1 - North Street', status: 'active', role: 'president', currency: 'INR', monthlyPledge: 500, joinedDate: '2025-01-10', avatarSeed: 'muthu' },
+      { id: 'm1', name: 'M. Muthukumar', nameTa: 'மு. முத்துக்குமார்', phone: '98421 10293', villageWard: 'Ward 1 - North Street', status: 'active', role: 'committee', currency: 'INR', monthlyPledge: 500, joinedDate: '2025-01-10', avatarSeed: 'muthu' },
       { id: 'm2', name: 'S. Selvarani', nameTa: 'செ. செல்வராணி', phone: '94432 87612', villageWard: 'Ward 2 - Middle Street', status: 'active', role: 'treasurer', currency: 'INR', monthlyPledge: 500, joinedDate: '2025-01-10', avatarSeed: 'selvi' },
-      { id: 'm3', name: 'K. Anbalagan', nameTa: 'கு. அன்பழகன்', phone: '97890 23411', villageWard: 'Ward 1 - School Lane', status: 'active', role: 'secretary', currency: 'INR', monthlyPledge: 300, joinedDate: '2025-01-10', avatarSeed: 'anbu' },
+      { id: 'm3', name: 'K. Anbalagan', nameTa: 'கு. அன்பழகன்', phone: '97890 23411', villageWard: 'Ward 1 - School Lane', status: 'active', role: 'committee', currency: 'INR', monthlyPledge: 300, joinedDate: '2025-01-10', avatarSeed: 'anbu' },
       { id: 'm4', name: 'R. Karuppiah', nameTa: 'ரா. கருப்பையா', phone: '96554 99120', villageWard: 'Ward 3 - East Colony', status: 'active', role: 'committee', currency: 'INR', monthlyPledge: 250, joinedDate: '2025-02-01', avatarSeed: 'karuppu' },
       // UAE Expatriate Members (Contributing in AED)
       { id: 'm5', name: 'S. Syed Ibrahim', nameTa: 'செ. சையது இப்ராஹிம்', phone: '+971 50 123 4567', villageWard: 'UAE - Deira, Dubai', status: 'active', role: 'committee', currency: 'AED', monthlyPledge: 50, isGulfMember: true, gulfCity: 'Dubai', joinedDate: '2025-02-15', avatarSeed: 'syed' },
@@ -1596,7 +1596,7 @@ class LocalDatabase {
         submittedBy: 'K. Anbalagan (Secretary)',
         submittedDate: '2026-11-01T10:00:00Z',
         reviews: [
-          { reviewerRole: 'president', reviewerName: 'M. Muthukumar', decision: 'approve', comment: 'Deserving student. Marksheet verified with +2 marks 94%.', timestamp: '2026-11-02T14:00:00Z' },
+          { reviewerRole: 'committee', reviewerName: 'M. Muthukumar', decision: 'approve', comment: 'Deserving student. Marksheet verified with +2 marks 94%.', timestamp: '2026-11-02T14:00:00Z' },
           { reviewerRole: 'treasurer', reviewerName: 'S. Selvarani', decision: 'approve', comment: 'Funds available in education reserve.', timestamp: '2026-11-03T10:00:00Z' }
         ],
         syncStatus: 'synced'
@@ -1634,7 +1634,7 @@ class LocalDatabase {
         submittedBy: 'K. Anbalagan',
         submittedDate: '2026-10-12T10:00:00Z',
         reviews: [
-          { reviewerRole: 'president', reviewerName: 'M. Muthukumar', decision: 'approve', comment: 'Approved for urgent health care', timestamp: '2026-10-13T12:00:00Z' }
+          { reviewerRole: 'committee', reviewerName: 'M. Muthukumar', decision: 'approve', comment: 'Approved for urgent health care', timestamp: '2026-10-13T12:00:00Z' }
         ],
         payoutDetails: {
           payoutId: 'PAY-10041',
@@ -1666,7 +1666,7 @@ class LocalDatabase {
         submittedDate: '2026-10-20T10:00:00Z',
         reviews: [
           { reviewerRole: 'committee', reviewerName: 'S. Syed Ibrahim', decision: 'approve', comment: 'Sponsored from UAE welfare pool', timestamp: '2026-10-21T11:00:00Z' },
-          { reviewerRole: 'president', reviewerName: 'M. Muthukumar', decision: 'approve', comment: 'Approved for urgent roof rehabilitation', timestamp: '2026-10-22T09:30:00Z' }
+          { reviewerRole: 'committee', reviewerName: 'M. Muthukumar', decision: 'approve', comment: 'Approved for urgent roof rehabilitation', timestamp: '2026-10-22T09:30:00Z' }
         ],
         payoutDetails: {
           payoutId: 'PAY-10048',
