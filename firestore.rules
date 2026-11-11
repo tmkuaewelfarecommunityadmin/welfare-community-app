@@ -1,0 +1,167 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net: Default-deny all undefined paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Hardened Global Primitives ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Role verification against app_users document or token email
+    function getUserData() {
+      return get(/databases/$(database)/documents/app_users/$(request.auth.uid)).data;
+    }
+
+    function hasUserDoc() {
+      return exists(/databases/$(database)/documents/app_users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (hasUserDoc() && getUserData().role == 'admin') ||
+        (request.auth.token.email == 'smdfaizel@gmail.com')
+      );
+    }
+
+    function isTreasurer() {
+      return isSignedIn() && (
+        isAdmin() ||
+        (hasUserDoc() && getUserData().role == 'treasurer')
+      );
+    }
+
+    function isPresident() {
+      return isSignedIn() && (
+        isAdmin() ||
+        (hasUserDoc() && getUserData().role == 'president')
+      );
+    }
+
+    function isSecretary() {
+      return isSignedIn() && (
+        isAdmin() ||
+        (hasUserDoc() && getUserData().role == 'secretary')
+      );
+    }
+
+    function isCommittee() {
+      return isSignedIn() && (
+        isAdmin() ||
+        (hasUserDoc() && (getUserData().role in ['committee', 'president', 'treasurer', 'secretary']))
+      );
+    }
+
+    // --- Entity Validation Blueprints ---
+    function isValidMember(data) {
+      return data.id is string &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.phone is string && data.phone.size() <= 30 &&
+             data.villageWard is string && data.villageWard.size() <= 100 &&
+             data.currency in ['INR', 'AED'] &&
+             data.monthlyPledge is number && data.monthlyPledge > 0;
+    }
+
+    function isValidPayment(data) {
+      return data.id is string &&
+             data.memberId is string &&
+             data.receiptNumber is string &&
+             data.currency in ['INR', 'AED'] &&
+             data.amount is number && data.amount > 0 &&
+             data.method in ['cash', 'upi', 'bank_transfer', 'exchange_house', 'botim'];
+    }
+
+    function isValidAssistance(data) {
+      return data.id is string &&
+             data.beneficiaryName is string && data.beneficiaryName.size() > 0 &&
+             data.category in ['education', 'health', 'marriage', 'hardship', 'emergency'] &&
+             data.requestedAmount is number && data.requestedAmount > 0 &&
+             data.status in ['submitted', 'under_review', 'approved', 'rejected', 'paid'];
+    }
+
+    function isValidLedger(data) {
+      return data.id is string &&
+             data.type in ['credit', 'debit'] &&
+             data.amount is number && data.amount > 0 &&
+             data.category is string &&
+             data.description is string;
+    }
+
+    // --- Collection Security Rules ---
+
+    // 1. Members Collection
+    match /members/{memberId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSignedIn() && (isAdmin() || isPresident() || isSecretary() || isTreasurer()) && isValidId(memberId) && isValidMember(incoming());
+      allow update: if isSignedIn() && (isAdmin() || isPresident() || isSecretary() || isTreasurer()) && isValidId(memberId) && isValidMember(incoming());
+      allow delete: if isAdmin() && isValidId(memberId);
+    }
+
+    // 2. Application Users (RBAC)
+    match /app_users/{userId} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isAdmin() && isValidId(userId);
+    }
+
+    // 3. Contribution Dues & Payments
+    match /payments/{paymentId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSignedIn() && (isTreasurer() || isPresident() || isSecretary()) && isValidId(paymentId) && isValidPayment(incoming());
+      allow update: if isSignedIn() && (isTreasurer() || isPresident()) && isValidId(paymentId) && isValidPayment(incoming());
+      allow delete: if isAdmin() && isValidId(paymentId);
+    }
+
+    match /dues/{dueId} {
+      allow get, list: if isSignedIn();
+      allow create, update: if isSignedIn() && (isTreasurer() || isPresident() || isSecretary()) && isValidId(dueId);
+      allow delete: if isAdmin() && isValidId(dueId);
+    }
+
+    // 4. Welfare Assistance Requests
+    match /assistance_requests/{requestId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(requestId) && isValidAssistance(incoming());
+      allow update: if isSignedIn() && (isCommittee() || isPresident() || isTreasurer()) && isValidId(requestId) && isValidAssistance(incoming());
+      allow delete: if isAdmin() && isValidId(requestId);
+    }
+
+    // 5. General Ledger (Double-Entry Bookkeeping)
+    match /ledger_entries/{entryId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSignedIn() && isTreasurer() && isValidId(entryId) && isValidLedger(incoming());
+      // Ledger entries are immutable: no direct modification or deletion once posted
+      allow update, delete: if false;
+    }
+
+    // 6. Security Audit Logs
+    match /audit_logs/{logId} {
+      allow get, list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(logId);
+      // Audit logs are tamper-evident: immutable once written
+      allow update, delete: if false;
+    }
+
+    // 7. AED Monthly Payouts
+    match /aed_monthly_payouts/{payoutId} {
+      allow get, list: if isSignedIn();
+      allow create, update: if isSignedIn() && isTreasurer() && isValidId(payoutId);
+      allow delete: if isAdmin() && isValidId(payoutId);
+    }
+  }
+}

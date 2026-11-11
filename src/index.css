@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Inter', 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Print Voucher & Dashboard PDF Styling */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .receipt-print-area, .receipt-print-area *, .dashboard-print-area, .dashboard-print-area * {
+    visibility: visible;
+  }
+  .receipt-print-area, .dashboard-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

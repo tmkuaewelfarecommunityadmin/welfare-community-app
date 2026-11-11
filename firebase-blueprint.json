@@ -1,0 +1,157 @@
+{
+  "entities": {
+    "Member": {
+      "title": "Community Member",
+      "description": "Registered local village or UAE diaspora contributing member",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "nameTa": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "villageWard": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "suspended", "inactive"] },
+        "role": { "type": "string", "enum": ["admin", "president", "treasurer", "secretary", "committee", "auditor", "member"] },
+        "currency": { "type": "string", "enum": ["INR", "AED"] },
+        "monthlyPledge": { "type": "number" },
+        "isGulfMember": { "type": "boolean" },
+        "gulfCity": { "type": "string" },
+        "joinedDate": { "type": "string" },
+        "avatarSeed": { "type": "string" }
+      },
+      "required": ["id", "name", "phone", "villageWard", "status", "role", "currency", "monthlyPledge"]
+    },
+    "AppUser": {
+      "title": "Application User Account",
+      "description": "User account mapped to an administrative role with Gmail authentication",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "fullName": { "type": "string" },
+        "fullNameTa": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "president", "treasurer", "secretary", "committee", "auditor", "member"] },
+        "memberId": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "suspended"] },
+        "lastLogin": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "username", "fullName", "role", "status", "createdAt"]
+    },
+    "PaymentReceipt": {
+      "title": "Payment Receipt",
+      "description": "Record of member dues contribution in INR or AED",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "receiptNumber": { "type": "string" },
+        "memberId": { "type": "string" },
+        "memberName": { "type": "string" },
+        "memberNameTa": { "type": "string" },
+        "month": { "type": "string" },
+        "currency": { "type": "string", "enum": ["INR", "AED"] },
+        "amount": { "type": "number" },
+        "exchangeRate": { "type": "number" },
+        "amountInINR": { "type": "number" },
+        "method": { "type": "string", "enum": ["cash", "upi", "bank_transfer", "exchange_house", "botim"] },
+        "referenceNumber": { "type": "string" },
+        "recordedBy": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "remittancePayoutId": { "type": "string" },
+        "syncStatus": { "type": "string" }
+      },
+      "required": ["id", "receiptNumber", "memberId", "month", "currency", "amount", "method", "referenceNumber", "recordedBy", "timestamp"]
+    },
+    "AssistanceRequest": {
+      "title": "Welfare Assistance Request",
+      "description": "Community welfare relief aid application and review trail",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "beneficiaryName": { "type": "string" },
+        "beneficiaryNameTa": { "type": "string" },
+        "beneficiaryPhone": { "type": "string" },
+        "category": { "type": "string", "enum": ["education", "health", "marriage", "hardship", "emergency"] },
+        "currency": { "type": "string", "enum": ["INR", "AED"] },
+        "requestedAmount": { "type": "number" },
+        "approvedAmount": { "type": "number" },
+        "reason": { "type": "string" },
+        "reasonTa": { "type": "string" },
+        "priority": { "type": "string", "enum": ["urgent", "high", "normal"] },
+        "status": { "type": "string", "enum": ["submitted", "under_review", "approved", "rejected", "paid"] },
+        "submittedBy": { "type": "string" },
+        "submittedDate": { "type": "string" },
+        "reviews": { "type": "array" },
+        "payoutDetails": { "type": "object" },
+        "syncStatus": { "type": "string" }
+      },
+      "required": ["id", "beneficiaryName", "category", "requestedAmount", "reason", "priority", "status", "submittedBy", "submittedDate"]
+    },
+    "LedgerEntry": {
+      "title": "Double-Entry General Ledger",
+      "description": "Audit-logged financial credit or debit transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "type": { "type": "string", "enum": ["credit", "debit"] },
+        "category": { "type": "string" },
+        "categoryTa": { "type": "string" },
+        "amount": { "type": "number" },
+        "balanceAfter": { "type": "number" },
+        "description": { "type": "string" },
+        "descriptionTa": { "type": "string" },
+        "referenceId": { "type": "string" },
+        "enteredBy": { "type": "string" },
+        "syncStatus": { "type": "string" }
+      },
+      "required": ["id", "date", "type", "category", "amount", "balanceAfter", "description", "referenceId", "enteredBy"]
+    },
+    "AuditLog": {
+      "title": "Security Audit Trail",
+      "description": "Immutable audit record of user and financial actions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "actor": { "type": "string" },
+        "action": { "type": "string" },
+        "actionTa": { "type": "string" },
+        "details": { "type": "string" },
+        "detailsTa": { "type": "string" },
+        "ipOrDevice": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "actor", "action", "details"]
+    }
+  },
+  "firestore": {
+    "/members/{memberId}": {
+      "schema": "Member",
+      "description": "Village and UAE diaspora members directory"
+    },
+    "/app_users/{userId}": {
+      "schema": "AppUser",
+      "description": "Authorized RBAC users with verified Gmail accounts"
+    },
+    "/payments/{paymentId}": {
+      "schema": "PaymentReceipt",
+      "description": "Contribution receipts for INR and AED dues"
+    },
+    "/assistance_requests/{requestId}": {
+      "schema": "AssistanceRequest",
+      "description": "Welfare assistance requests and committee review status"
+    },
+    "/ledger_entries/{entryId}": {
+      "schema": "LedgerEntry",
+      "description": "Double-entry trust accounts ledger"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Immutable security and governance audit logs"
+    }
+  }
+}

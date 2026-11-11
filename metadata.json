@@ -1,0 +1,6 @@
+{
+  "name": "GramaNidhi - Village Community Fund",
+  "description": "Zero-cost, offline-first village community fund management application with seamless data synchronization, Tamil and English bilingual interface, double-entry ledger, and assistance disbursements.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
