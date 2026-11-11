@@ -123,21 +123,9 @@ export default function App() {
     setAuthSession(null);
   };
 
-  // If user is not authenticated with an allowed Gmail address, show LoginView
-  if (!authSession) {
-    return (
-      <LoginView
-        lang={lang}
-        onLanguageChange={setLang}
-        orgInfo={orgInfo}
-        onLoginSuccess={handleLoginSuccess}
-      />
-    );
-  }
-
   // Current Member ID resolution for logged-in user or active role
-
   useEffect(() => {
+    if (!authSession) return;
     if (authSession?.user?.memberId) {
       setCurrentMemberId(authSession.user.memberId);
     } else {
@@ -155,10 +143,23 @@ export default function App() {
 
   // Guard role permissions strictly with dynamic screen access
   useEffect(() => {
+    if (!authSession) return;
     if (!canAccessScreen(activeTab, activeRole)) {
       setActiveTab('dashboard');
     }
-  }, [activeRole, activeTab]);
+  }, [authSession, activeRole, activeTab]);
+
+  // If user is not authenticated, show LoginView after all hooks have executed
+  if (!authSession) {
+    return (
+      <LoginView
+        lang={lang}
+        onLanguageChange={setLang}
+        orgInfo={orgInfo}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-stone-100 flex flex-col text-stone-900 font-sans selection:bg-emerald-200">
